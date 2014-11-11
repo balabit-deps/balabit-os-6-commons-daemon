@@ -1,0 +1,7 @@
+libgcj_PR31700.diff
+kfreebsd_support.diff
+s390x_support.diff
+hurd_support.diff
+mips_abi_n32_n64_support.diff
+arm64.diff
+ppc64el.diff

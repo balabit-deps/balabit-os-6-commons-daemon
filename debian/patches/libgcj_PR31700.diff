@@ -1,0 +1,17 @@
+Description: Workaround for libgcj/PR31700 in handling -X options.
+Bug: vendor, http://gcc.gnu.org/PR31700
+Author: Marcus Better <marcus@better.se>
+Last-Update: 2010-07-28
+Index: b/src/native/unix/native/java.c
+===================================================================
+--- a/src/native/unix/native/java.c
++++ b/src/native/unix/native/java.c
+@@ -245,7 +245,7 @@
+         return false;
+     }
+ #endif
+-    arg.ignoreUnrecognized = FALSE;
++    arg.ignoreUnrecognized = JNI_TRUE;
+     arg.nOptions = args->onum + 4; /* pid, ppid and abort */
+     opt = (JavaVMOption *) malloc(arg.nOptions * sizeof(JavaVMOption));
+     for (x = 0; x < args->onum; x++) {

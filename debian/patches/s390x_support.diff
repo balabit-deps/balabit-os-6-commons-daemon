@@ -1,0 +1,13 @@
+Description: Adds support for s390x
+Author: Emmanuel Bourg <ebourg@apache.org>
+--- a/src/native/unix/support/apsupport.m4
++++ b/src/native/unix/support/apsupport.m4
+@@ -161,7 +161,7 @@
+         HOST_CPU=ia64
+     fi
+     ;;
+-  s390)
++  s390 | s390x)
+     CFLAGS="$CFLAGS -DCPU=\\\"s390\\\""
+     supported_os="s390"
+     HOST_CPU=s390

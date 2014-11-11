@@ -1,0 +1,30 @@
+Description: Define the PATH_MAX constant not available for Hurd
+Author: Emmanuel Bourg <ebourg@apache.org>
+Forwarded: https://issues.apache.org/jira/browse/DAEMON-294
+--- a/src/native/unix/native/arguments.c
++++ b/src/native/unix/native/arguments.c
+@@ -19,6 +19,10 @@
+ #include <limits.h>
+ #include <glob.h>
+ 
++#ifndef PATH_MAX
++#define PATH_MAX 4096
++#endif
++
+ /* Return the argument of a command line option */
+ static char *optional(int argc, char *argv[], int argi)
+ {
+--- a/src/native/unix/support/apsupport.m4
++++ b/src/native/unix/support/apsupport.m4
+@@ -78,6 +78,11 @@
+     supported_os="kfreebsd-gnu"
+     LIBS="$LIBS -ldl -lpthread"
+     ;;
++  gnu*)
++    CFLAGS="$CFLAGS -DOS_HURD -DDSO_DLFCN -pthread "
++    supported_os="hurd-gnu"
++    LIBS="$LIBS -ldl -lpthread"
++    ;;
+   *)
+     AC_MSG_RESULT([failed])
+     AC_MSG_ERROR([Unsupported operating system "$host_os"])

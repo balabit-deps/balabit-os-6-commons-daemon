@@ -1,0 +1,40 @@
+#!/usr/bin/make -f
+
+JAVA_HOME	:= /usr/lib/jvm/default-java
+ANT_ARGS	:= -Dcompile.source=1.5 -Dcompile.target=1.5
+
+MAN_STYLESHEET  := /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl
+XSLTPROC 	:= xsltproc --nonet
+
+PKGNAME		:= commons-daemon
+JAVALIBDIR	:= /usr/share/java
+VERSION		:= $(shell head -1 debian/changelog | cut -f2 -d\( | cut -f1 -d\) | cut -f1 -d\-)
+
+NATIVE_SRC	:= src/native/unix
+
+%:
+	dh $@ --sourcedirectory=$(NATIVE_SRC) --buildsystem=autoconf --with autotools_dev
+
+override_dh_auto_configure:
+	(cd $(NATIVE_SRC); autoconf)
+	dh_auto_configure -- --with-java=$(JAVA_HOME) $(shell dpkg-buildflags --export=configure)
+
+override_dh_auto_build:
+	JAVA_HOME=$(JAVA_HOME) ant $(ANT_ARGS)
+	dh_auto_build
+	$(XSLTPROC) $(MAN_STYLESHEET) $(NATIVE_SRC)/man/jsvc.1.xml
+
+override_dh_auto_clean:
+	JAVA_HOME=$(JAVA_HOME) ant $(ANT_ARGS) clean
+	dh_auto_clean
+	rm -f jsvc.1
+	mh_clean
+	rm -f src/native/unix/configure
+
+override_dh_auto_install:
+	dh_auto_install
+	mh_installpoms -plib$(PKGNAME)-java
+	mh_installjar -plib$(PKGNAME)-java -l pom.xml dist/$(PKGNAME)-$(VERSION).jar
+
+get-orig-source:
+	uscan --force-download --rename

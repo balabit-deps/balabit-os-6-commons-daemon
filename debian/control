@@ -1,0 +1,46 @@
+Source: commons-daemon
+Section: java
+Priority: optional
+Maintainer: Debian Java Maintainers <pkg-java-maintainers@lists.alioth.debian.org>
+Uploaders: Marcus Better <marcus@better.se>,
+           Damien Raude-Morvan <drazzib@debian.org>,
+           Emmanuel Bourg <ebourg@apache.org>
+Build-Depends: ant,
+               autoconf,
+               autotools-dev,
+               debhelper (>= 9),
+               default-jdk,
+               docbook-xsl,
+               libcap-dev [linux-any],
+               maven-repo-helper,
+               xsltproc
+Build-Conflicts: autoconf2.13
+Standards-Version: 3.9.6
+Vcs-Git: git://anonscm.debian.org/pkg-java/commons-daemon.git
+Vcs-Browser: http://anonscm.debian.org/cgit/pkg-java/commons-daemon.git
+Homepage: http://commons.apache.org/daemon/
+
+Package: libcommons-daemon-java
+Architecture: all
+Depends: ${misc:Depends}
+Suggests: java-virtual-machine
+Recommends: jsvc
+Description: Library to launch Java applications as daemons
+ The Daemon package from Apache Commons can be used to implement Java
+ applications which can be launched as daemons. For example the
+ program will be notified about a shutdown so that it can perform
+ cleanup tasks before its process of execution is destroyed by the
+ operation system.
+ .
+ This package contains the java library. You will also need the actual
+ binary for your architecture which is provided by the jsvc package.
+
+Package: jsvc
+Section: utils
+Architecture: any
+Depends: libcommons-daemon-java, ${misc:Depends}, ${shlibs:Depends}
+Recommends: default-jre-headless | java2-runtime-headless
+Description: Wrapper to launch Java applications as daemons
+ This is the native application for launching Java applications
+ implementing certain interfaces from the libcommons-daemon-java
+ package as daemons.
